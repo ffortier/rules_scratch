@@ -1,0 +1,6 @@
+load("@rules_scratch//scratch:defs.bzl", "scratch_stage")
+
+scratch_stage(
+    name = "stage",
+    visibility = ["//examples/simple:__subpackages__"],
+)

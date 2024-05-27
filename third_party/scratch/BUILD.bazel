@@ -1,0 +1,62 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
+load("@aspect_bazel_lib//lib:directory_path.bzl", "directory_path")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+load("//tools/jsonschema:defs.bzl", "jsonschema_cc_library")
+
+directory_path(
+    name = "sb3_schema_path",
+    directory = ":node_modules/scratch-parser/dir",
+    path = "lib/sb3_schema.json",
+)
+
+directory_path(
+    name = "sprite3_schema_path",
+    directory = ":node_modules/scratch-parser/dir",
+    path = "lib/sprite3_schema.json",
+)
+
+directory_path(
+    name = "sb3_definitions_path",
+    directory = ":node_modules/scratch-parser/dir",
+    path = "lib/sb3_definitions.json",
+)
+
+copy_file(
+    name = "sb3_schema_json",
+    src = ":sb3_schema_path",
+    out = "sb3_schema.json",
+)
+
+copy_file(
+    name = "sb3_definitions_json",
+    src = ":sb3_definitions_path",
+    out = "sb3_definitions.json",
+)
+
+copy_file(
+    name = "sprite3_schema_json",
+    src = ":sprite3_schema_path",
+    out = "sprite3_schema.json",
+)
+
+npm_link_all_packages(name = "node_modules")
+
+jsonschema_cc_library(
+    name = "sb3_schema",
+    srcs = [
+        ":sb3_definitions_json",
+        ":sb3_schema_json",
+    ],
+    main = "sb3_schema.json",
+    visibility = ["//:__subpackages__"],
+)
+
+jsonschema_cc_library(
+    name = "sprite3_schema",
+    srcs = [
+        ":sb3_definitions_json",
+        ":sprite3_schema_json",
+    ],
+    main = "sprite3_schema.json",
+    visibility = ["//:__subpackages__"],
+)

@@ -1,0 +1,31 @@
+load("//scratch:defs.bzl", "scratch_blocks")
+load("//tools/jsonschema:defs.bzl", "jsonschema_cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+scratch_blocks(
+    name = "std",
+    deps = [
+        "//blocks/control",
+        "//blocks/events",
+        "//blocks/looks",
+        "//blocks/motion",
+        "//blocks/operators",
+        "//blocks/sensing",
+        "//blocks/sound",
+        "//blocks/vars",
+    ],
+)
+
+alias(
+    name = "pen",
+    actual = "//blocks/pen",
+)
+
+jsonschema_cc_library(
+    name = "schema",
+    srcs = ["schema.json"],
+    main = "schema.json",
+    namespace = "sb::schema",
+    visibility = ["//:__subpackages__"],
+)

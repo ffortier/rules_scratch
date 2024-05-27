@@ -1,0 +1,56 @@
+# load("//tools/jsonschema:defs.bzl", "jsonschema_cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+
+cc_library(
+    name = "lang",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":lexer",
+        ":parser",
+    ],
+)
+
+# jsonschema_cc_library(
+#     name = "schema",
+#     srcs = ["//blocks:schema.json"],
+#     namespace = "sb::schema",
+# )
+
+cc_library(
+    name = "lexer",
+    srcs = ["lexer.cc"],
+    hdrs = ["lexer.hh"],
+)
+
+cc_test(
+    name = "lexer_test",
+    size = "small",
+    srcs = ["lexer_test.cc"],
+    deps = [
+        ":lexer",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "parser",
+    srcs = ["parser.cc"],
+    hdrs = ["parser.hh"],
+    deps = [
+        ":lexer",
+        "//blocks:schema",
+        "//third_party/scratch:sb3_schema",
+        "//third_party/scratch:sprite3_schema",
+        "@glog",
+    ],
+)
+
+cc_test(
+    name = "parser_test",
+    size = "small",
+    srcs = ["parser_test.cc"],
+    deps = [
+        ":parser",
+        "@googletest//:gtest_main",
+    ],
+)

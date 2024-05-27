@@ -1,0 +1,7 @@
+load("@rules_scratch//scratch:defs.bzl", "scratch_binary")
+
+scratch_binary(
+    name = "simple",
+    sprites = ["//examples/simple/scratchy"],
+    stage = "//examples/simple/stage",
+)

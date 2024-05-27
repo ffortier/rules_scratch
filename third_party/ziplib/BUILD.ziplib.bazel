@@ -1,0 +1,56 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "zlib",
+    srcs = glob(["Source/ZipLib/extlibs/zlib/*.c"]),
+    hdrs = glob(["Source/ZipLib/extlibs/zlib/*.h"]),
+    copts = [
+        "-Wno-everything",
+        "-std=c99",
+    ],
+)
+
+cc_library(
+    name = "lzma",
+    srcs = glob(["Source/ZipLib/extlibs/lzma/unix/*.c"]),
+    hdrs = glob([
+        "Source/ZipLib/extlibs/lzma/unix/*.h",
+        "Source/ZipLib/extlibs/lzma/*.h",
+    ]),
+    copts = [
+        "-Wno-everything",
+        "-std=c99",
+    ],
+)
+
+cc_library(
+    name = "bzip2",
+    srcs = glob(["Source/ZipLib/extlibs/bzip2/*.c"]),
+    hdrs = glob(["Source/ZipLib/extlibs/bzip2/*.h"]),
+    copts = [
+        "-Wno-everything",
+        "-std=c99",
+    ],
+)
+
+cc_library(
+    name = "ziplib",
+    srcs = glob([
+        "Source/ZipLib/*.cpp",
+        "Source/ZipLib/detail/*.cpp",
+    ]),
+    hdrs = glob(
+        ["Source/ZipLib/**/*.h"],
+    ),
+    copts = [
+        "-Wno-everything",
+        "-std=c++11",
+    ],
+    strip_include_prefix = "Source",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":bzip2",
+        ":lzma",
+        ":zlib",
+    ],
+)

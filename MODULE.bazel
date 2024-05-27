@@ -1,0 +1,100 @@
+module(name = "rules_scratch")
+
+bazel_dep(name = "bazel_skylib", version = "1.6.1")
+bazel_dep(name = "aspect_bazel_lib", version = "2.7.2")
+
+bazel_dep(name = "glog", version = "0.7.0")
+bazel_dep(name = "googletest", version = "1.14.0")
+bazel_dep(name = "rules_cc", version = "0.0.9")
+
+bazel_lib_toolchains = use_extension("@aspect_bazel_lib//lib:extensions.bzl", "toolchains")
+bazel_lib_toolchains.jq()
+use_repo(bazel_lib_toolchains, "jq_toolchains")
+
+register_toolchains(
+    "@jq_toolchains//:all",
+)
+
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+
+git_override(
+    module_name = "hedron_compile_commands",
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+    commit = "a14ad3a64e7bf398ab48105aaa0348e032ac87f8",
+)
+
+bazel_dep(name = "toolchains_llvm", version = "1.0.0", dev_dependency = True)
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+
+llvm.toolchain(
+    llvm_version = "16.0.0",
+    cxx_standard = {
+        "darwin-aarch64": "c++20",
+        "darwin-x86_64": "c++20",
+        "linux-aarch64": "c++20",
+        "linux-x86_64": "c++20",
+    },
+)
+
+use_repo(llvm, "llvm_toolchain")
+
+register_toolchains("@llvm_toolchain//:all")
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+
+http_archive(
+    name = "ziplib",
+    urls = ["https://bitbucket.org/wbenny/ziplib/get/176e4b6d51fc.zip"],
+    sha256 = "fb704bf16cc14a6cf595f83d9bd411fd8023aca63c5ec45c7917ff839b1f54ce",
+    build_file = "//third_party/ziplib:BUILD.ziplib.bazel",
+    strip_prefix = "wbenny-ziplib-176e4b6d51fc",
+    patches = ["//third_party/ziplib:ziplib.patch"],
+    patch_args = ["-p1"],
+)
+
+register_toolchains("//scratch:all")
+
+http_file(
+    downloaded_file_path = "json.hpp",
+    name = "nlohmann_json",
+    urls = ["https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp"],
+    sha256 = "9bea4c8066ef4a1c206b2be5a36302f8926f7fdc6087af5d20b417d0cf103ea6",
+)
+
+simdjson = use_repo_rule("//third_party/simdjson:simdjson.bzl", "simdjson")
+
+simdjson(name = "simdjson")
+
+bazel_dep(name = "aspect_rules_js", version = "2.0.0-alpha.3")
+bazel_dep(name = "rules_nodejs", version = "6.1.0")
+
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node", dev_dependency = True)
+
+node.toolchain()
+
+use_repo(node, "nodejs")
+
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm", dev_dependency = True)
+pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm", dev_dependency = True)
+
+npm.npm_translate_lock(
+    name = "npm",
+    pnpm_lock = "//:pnpm-lock.yaml",
+    verify_node_modules_ignored = "//:.bazelignore",
+    npmrc = "//:.npmrc",
+)
+
+use_repo(npm, "npm")
+use_repo(pnpm, "pnpm")
+
+http_archive(
+    name = "md5",
+    urls = ["https://github.com/CommanderBubble/MD5/archive/552ad5a446a6b22c21e8c7856cfe967e10d5b364.zip"],
+    strip_prefix = "MD5-552ad5a446a6b22c21e8c7856cfe967e10d5b364",
+    sha256 = "4800276cbc37456df7433637481826fa3e5563ff95caeafc9317c3705e021009",
+    patches = ["//third_party/md5:md5.patch"],
+    patch_args = ["-p1"],
+    build_file = "//third_party/md5:BUILD.md5.bazel",
+)

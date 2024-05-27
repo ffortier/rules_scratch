@@ -1,0 +1,8 @@
+load("@rules_scratch//scratch:defs.bzl", "scratch_sprite")
+
+scratch_sprite(
+    name = "scratchy",
+    srcs = ["main.lisp"],
+    costumes = ["cat.svg"],
+    visibility = ["//examples/simple:__subpackages__"],
+)

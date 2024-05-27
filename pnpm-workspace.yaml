@@ -1,0 +1,4 @@
+packages:
+  - tools/jsonschema
+  - tools/stdcapture
+  - third_party/scratch

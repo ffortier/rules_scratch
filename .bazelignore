@@ -1,0 +1,4 @@
+node_modules
+tools/jsonschema/node_modules
+tools/stdcapture/node_modules
+third_party/scratch/node_modules

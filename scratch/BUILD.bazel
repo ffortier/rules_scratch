@@ -1,0 +1,16 @@
+load(":private/scratch_toolchain.bzl", "scratch_toolchain")
+
+package(default_visibility = ["//visibility:public"])
+
+toolchain_type(name = "toolchain_type")
+
+scratch_toolchain(
+    name = "tools",
+)
+
+toolchain(
+    name = "classic_toolchain",
+    target_compatible_with = ["//platforms/runtime:scratch"],
+    toolchain = ":tools",
+    toolchain_type = ":toolchain_type",
+)

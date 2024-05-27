@@ -1,0 +1,29 @@
+load("@bazel_skylib//rules:common_settings.bzl", "string_setting")
+
+package(default_visibility = ["//visibility:public"])
+
+string_setting(
+    name = "runtime",
+    build_setting_default = "scratch",
+)
+
+platform(
+    name = "scratch",
+    constraint_values = ["//platforms/runtime:scratch"],
+)
+
+platform(
+    name = "leopardjs",
+    constraint_values = ["//platforms/runtime:leopardjs"],
+)
+
+platform(
+    name = "turbowrap",
+    constraint_values = ["//platforms/runtime:turbowrap"],
+)
+
+platform(
+    name = "turbowrap_native",
+    constraint_values = ["//platforms/runtime:turbowrap_native"],
+    parents = ["@local_config_platform//:host"],
+)

@@ -1,0 +1,26 @@
+{
+    "$schema": "../schema.json",
+    "if": {
+        "topLevel": false,
+        "container": true,
+        "aliases": [
+            "si"
+        ],
+        "bodies": {
+            "then": {
+                "optional": false,
+                "default": true,
+                "aliases": [
+                    "alors"
+                ]
+            },
+            "else": {
+                "optional": true,
+                "default": false,
+                "aliases": [
+                    "sinon"
+                ]
+            }
+        }
+    }
+}

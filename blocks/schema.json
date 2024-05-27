@@ -1,0 +1,59 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": {
+        "$ref": "#/definitions/BlockDefinition"
+    },
+    "definitions": {
+        "BlockDefinition": {
+            "type": "object",
+            "properties": {
+                "isTopLevel": {
+                    "type": "boolean"
+                },
+                "container": {
+                    "type": "boolean"
+                },
+                "aliases": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "bodies": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/BodyDefinition"
+                    }
+                }
+            },
+            "required": [
+                "topLevel",
+                "container",
+                "aliases"
+            ]
+        },
+        "BodyDefinition": {
+            "type": "object",
+            "properties": {
+                "optional": {
+                    "type": "boolean"
+                },
+                "default": {
+                    "type": "boolean"
+                },
+                "aliases": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "optional",
+                "default",
+                "aliases"
+            ]
+        }
+    }
+}

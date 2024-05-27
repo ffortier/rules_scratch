@@ -1,0 +1,26 @@
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+write_file(
+    name = "conf",
+    out = "conf.h",
+    content = [
+        "#define MD5_BIG_ENDIAN 0",
+        "#define MD5_DEBUG 0",
+    ],
+)
+
+cc_library(
+    name = "md5",
+    srcs = [
+        "src/md5.cpp",
+        ":conf",
+    ],
+    hdrs = [
+        "src/md5.h",
+        "src/md5_loc.h",
+    ],
+    include_prefix = "md5",
+    strip_include_prefix = "src",
+    visibility = ["//visibility:public"],
+)

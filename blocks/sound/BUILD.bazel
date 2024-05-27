@@ -1,0 +1,7 @@
+load("//scratch:defs.bzl", "scratch_blocks")
+
+scratch_blocks(
+    name = "sound",
+    srcs = glob(["*.json"]),
+    visibility = ["//:__subpackages__"],
+)

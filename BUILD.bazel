@@ -1,0 +1,17 @@
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+npm_link_all_packages(name = "node_modules")
+
+copy_file(
+    name = "json_hpp",
+    src = "@nlohmann_json//file",
+    out = "json.hpp",
+)
+
+cc_library(
+    name = "nlohmann_json",
+    hdrs = [":json_hpp"],
+    visibility = [":__subpackages__"],
+)
